@@ -1,5 +1,5 @@
 // Create a new file: routes/verifyRoute.ts
-const express=require("express")
+import express from "express"
 import { verifyEmail } from "../controllers/verfiyemail.js";
 
 const router = express.Router();

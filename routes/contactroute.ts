@@ -1,4 +1,4 @@
-const express=require("express")
+import express from "express"
 import { contactController } from '../controllers/contactcontroller.js';
 import rateLimit from 'express-rate-limit';
 

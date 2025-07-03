@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-const express=require("express")
+// const express=require("express")
+
 import { Request, Response } from "express";
 import { User, validateLogin } from "../models/usermodel.js";
 

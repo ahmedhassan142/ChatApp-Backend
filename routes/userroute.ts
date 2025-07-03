@@ -1,6 +1,6 @@
-const express=require("express")
+import express from "express"
 import  registercontroller from '../controllers/registercontroller.js';
-import { getMessages,deleteMessage } from '../controllers/messagecontroller.js';
+import { getMessages } from '../controllers/messagecontroller.js';
 import { peoplecontroller } from '../controllers/peoplecontroller.js';
 import  logincontroller  from '../controllers/logincontroller.js';
 import { verifyEmail } from '../controllers/verfiyemail.js';

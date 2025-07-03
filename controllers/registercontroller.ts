@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-const express=require("express")
+
 import { Request, Response } from "express";
 import { User, validateRegister } from "../models/usermodel.js";
 import { Token } from "../models/token.js";

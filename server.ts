@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
-dotenv.config();
-const express=require("express")
+
+import express from "express"
 import  { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import connectDB from "./db/connect.js";
@@ -13,7 +13,7 @@ import verifyroute from "./routes/verifyroute.js";
 
 
 
-
+dotenv.config();
 // Database connection
 connectDB();
 

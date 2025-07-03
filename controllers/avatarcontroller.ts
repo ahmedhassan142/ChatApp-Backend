@@ -1,4 +1,4 @@
-const express=require("express")
+
 import { Request, Response } from "express";
 import { Avatar } from "../models/avatar.js";
 

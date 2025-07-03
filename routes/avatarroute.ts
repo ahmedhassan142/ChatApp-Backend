@@ -1,4 +1,4 @@
-const express=require("express")
+import express from "express"
 
 import { downloadAvatars,uploadAvatar } from '../controllers/profilecontroller.js';
 import { getAllAvatars } from '../controllers/profilecontroller.js';
