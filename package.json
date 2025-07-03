@@ -1,9 +1,9 @@
 {
- "name": "chatapplication",
+  "name": "your-app",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm server.ts",
+    "start": "NODE_OPTIONS='--loader ts-node/esm --no-warnings' node server.ts",
     "build": "tsc",
     "dev": "nodemon server.ts"
   },

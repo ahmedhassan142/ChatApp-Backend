@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "module": "ES2020",  // Can use ES2020 instead of ESNext
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "outDir": "./dist",
     "rootDir": ".",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+   
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
