@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { sendEmail } from '../utils/sendEmail'; // Adjust path as needed
+import { sendEmail } from '../utils/sendEmail.js'; // Adjust path as needed
 
 interface ContactRequest {
   name: string;

@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema, Types } from "mongoose";
-import { IUser } from "./usermodel";
+import { IUser } from "./usermodel.js";
 
 export interface IMessage extends Document {
   sender: Types.ObjectId | IUser;

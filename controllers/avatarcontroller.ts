@@ -1,6 +1,6 @@
 const express=require("express")
 import { Request, Response } from "express";
-import { Avatar } from "../models/avatar";
+import { Avatar } from "../models/avatar.js";
 
 interface AvatarRequestBody {
   link: string;

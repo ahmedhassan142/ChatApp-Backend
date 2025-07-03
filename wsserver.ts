@@ -1,8 +1,8 @@
 import { WebSocketServer, WebSocket } from 'ws';
 import { Server } from 'http';
 import jwt from 'jsonwebtoken';
-import { User } from './models/usermodel';
-import { Message } from './models/message';
+import { User } from './models/usermodel.js';
+import { Message } from './models/message.js';
 
 interface CustomWebSocket extends WebSocket {
   userId?: string;

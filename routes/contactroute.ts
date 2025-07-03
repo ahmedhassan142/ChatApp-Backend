@@ -1,5 +1,5 @@
 const express=require("express")
-import { contactController } from '../controllers/contactcontroller';
+import { contactController } from '../controllers/contactcontroller.js';
 import rateLimit from 'express-rate-limit';
 
 const router = express.Router();

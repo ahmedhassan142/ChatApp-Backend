@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser } from "./usermodel"; // Assuming you have a User interface
+import { IUser } from "./usermodel.js"; // Assuming you have a User interface
 
 export interface IToken extends Document {
   userId: mongoose.Types.ObjectId | IUser;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { protect } from "../middleware/protect";
-import { Message } from "../models/message";
+import { protect } from "../middleware/protect.js";
+import { Message } from "../models/message.js";
 
 interface JWTUserData {
   _id: string;

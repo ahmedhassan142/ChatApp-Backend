@@ -4,9 +4,13 @@
     "module": "ES2020",  // Can use ES2020 instead of ESNext
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "baseUrl": "./",
     "outDir": "./dist",
     "rootDir": ".",
     "strict": true,
+      "paths": {
+      "@/*": ["./*"]
+    },
    
     "skipLibCheck": true,
     "types": ["node"]

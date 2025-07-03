@@ -1,7 +1,7 @@
 const express=require("express")
 
-import { downloadAvatars,uploadAvatar } from '../controllers/profilecontroller';
-import { getAllAvatars } from '../controllers/profilecontroller';
+import { downloadAvatars,uploadAvatar } from '../controllers/profilecontroller.js';
+import { getAllAvatars } from '../controllers/profilecontroller.js';
 
 const router = express.Router();
 

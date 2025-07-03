@@ -2,9 +2,9 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 const express=require("express")
 import { Request, Response } from "express";
-import { User, validateRegister } from "../models/usermodel";
-import { Token } from "../models/token";
-import { sendEmail } from "../utils/sendEmail";
+import { User, validateRegister } from "../models/usermodel.js";
+import { Token } from "../models/token.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 interface RegisterRequestBody {
   firstName: string;

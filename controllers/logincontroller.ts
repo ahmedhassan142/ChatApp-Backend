@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 const express=require("express")
 import { Request, Response } from "express";
-import { User, validateLogin } from "../models/usermodel";
+import { User, validateLogin } from "../models/usermodel.js";
 
 interface LoginRequestBody {
   email: string;

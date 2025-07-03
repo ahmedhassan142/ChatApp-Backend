@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { User } from "../models/usermodel";
+import { User } from "../models/usermodel.js";
 import { v4 as uuidv4 } from 'uuid';
 
-import { upload,handleUploadErrors } from "../utils/uploadconfig";
+import { upload,handleUploadErrors } from "../utils/uploadconfig.js";
 
 interface JwtPayload {
   _id: string;

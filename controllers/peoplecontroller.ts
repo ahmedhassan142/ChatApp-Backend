@@ -2,7 +2,7 @@ const express=require("express")
 import jwt from "jsonwebtoken"
 
 import { Request, Response } from "express";
-import { User } from "../models/usermodel";
+import { User } from "../models/usermodel.js";
 
 export const peoplecontroller= async (req:Request, res:Response) => {
   try {

@@ -1,13 +1,13 @@
 const express=require("express")
-import  registercontroller from '../controllers/registercontroller';
-import { getMessages,deleteMessage } from '../controllers/messagecontroller';
-import { peoplecontroller } from '../controllers/peoplecontroller';
-import  logincontroller  from '../controllers/logincontroller';
-import { verifyEmail } from '../controllers/verfiyemail';
-import  {profileController}  from '../controllers/profilecontroller';
-import { profileUpdate } from '../controllers/profilecontroller';
+import  registercontroller from '../controllers/registercontroller.js';
+import { getMessages,deleteMessage } from '../controllers/messagecontroller.js';
+import { peoplecontroller } from '../controllers/peoplecontroller.js';
+import  logincontroller  from '../controllers/logincontroller.js';
+import { verifyEmail } from '../controllers/verfiyemail.js';
+import  {profileController}  from '../controllers/profilecontroller.js';
+import { profileUpdate } from '../controllers/profilecontroller.js';
 import { Request,Response } from 'express';
-import { clearConversation } from '../controllers/messagecontroller';
+import { clearConversation } from '../controllers/messagecontroller.js';
 
 const router = express.Router();
 

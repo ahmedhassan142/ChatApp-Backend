@@ -1,14 +1,15 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { Request, Response, NextFunction } from "express";
+const express=require("express")
+import  { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import connectDB from "./db/connect";
-import userroute from "./routes/userroute";
-import avatarroute from "./routes/avatarroute";
+import connectDB from "./db/connect.js";
+import userroute from "./routes/userroute.js";
+import avatarroute from "./routes/avatarroute.js";
 import cookieParser from "cookie-parser";
-import { createWebSocketServer } from "./wsserver";
+import { createWebSocketServer } from "./wsserver.js";
 import path from "path";
-import verifyroute from "./routes/verifyroute";
+import verifyroute from "./routes/verifyroute.js";
 
 
 
