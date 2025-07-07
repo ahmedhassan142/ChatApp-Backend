@@ -73,5 +73,5 @@ export const validateLogin = (data: {
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().required().label("Password"),
   });
-  return schema.validate(data);
+  return schema.validate(data); 
 };
