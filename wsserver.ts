@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws';
-import { Server } from 'http';
-import jwt from 'jsonwebtoken';
+import { Server, IncomingMessage } from 'http';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from './models/usermodel.js';
 import { Message } from './models/message.js';
 
@@ -10,14 +10,22 @@ interface CustomWebSocket extends WebSocket {
   isAlive?: boolean;
   pingInterval?: NodeJS.Timeout;
   timeout?: NodeJS.Timeout;
+  send(data: string): void;
+  close(code?: number, reason?: string): void;
+  on(event: string, listener: (...args: any[]) => void): this;
+  ping(data?: any): void;
+  terminate(): void;
 }
 
 export const createWebSocketServer = (server: Server) => {
   const wss = new WebSocketServer({
     server,
-    verifyClient: (info, done) => {
+    verifyClient: (info: { req: IncomingMessage }, done: (result: boolean, code?: number, message?: string) => void) => {
       try {
-        // Extract token from query parameters or cookies
+        if (!info.req.url || !info.req.headers.host) {
+          return done(false, 400, 'Bad request');
+        }
+
         const url = new URL(`ws://${info.req.headers.host}${info.req.url}`);
         const token = url.searchParams.get('token') || 
                      info.req.headers.cookie?.split(';')
@@ -28,8 +36,7 @@ export const createWebSocketServer = (server: Server) => {
           return done(false, 401, 'Authentication token required');
         }
 
-        // Verify token
-        jwt.verify(token, process.env.JWTPRIVATEKEY!, (err, decoded) => {
+        jwt.verify(token, process.env.JWTPRIVATEKEY!, (err: Error | null, decoded: unknown) => {
           if (err) {
             console.error('Token verification failed:', err);
             return done(false, 403, 'Invalid token');
@@ -43,7 +50,6 @@ export const createWebSocketServer = (server: Server) => {
     }
   });
 
-  // Heartbeat interval (checks connection every 30 seconds)
   const heartbeatInterval = setInterval(() => {
     wss.clients.forEach((client) => {
       const ws = client as CustomWebSocket;
@@ -56,11 +62,14 @@ export const createWebSocketServer = (server: Server) => {
     });
   }, 30000);
 
-  wss.on('connection', (connection: WebSocket, req) => {
+  wss.on('connection', (connection: WebSocket, req: IncomingMessage) => {
     const ws = connection as CustomWebSocket;
     ws.isAlive = true;
 
-    // Extract and verify token again for user data
+    if (!req.url || !req.headers.host) {
+      return ws.close(4000, 'Invalid request');
+    }
+
     const url = new URL(`ws://${req.headers.host}${req.url}`);
     const token = url.searchParams.get('token') || 
                  req.headers.cookie?.split(';')
@@ -68,7 +77,11 @@ export const createWebSocketServer = (server: Server) => {
                    ?.split('=')[1];
 
     try {
-      const decoded = jwt.verify(token!, process.env.JWTPRIVATEKEY!) as any;
+      const decoded = jwt.verify(token!, process.env.JWTPRIVATEKEY!) as JwtPayload & { 
+        _id: string; 
+        firstName: string; 
+        lastName: string 
+      };
       ws.userId = decoded._id;
       ws.username = `${decoded.firstName} ${decoded.lastName}`;
     } catch (error) {
@@ -76,22 +89,18 @@ export const createWebSocketServer = (server: Server) => {
       return ws.close(4001, 'Authentication failed');
     }
 
-    // Setup heartbeat
     ws.on('pong', () => {
       ws.isAlive = true;
     });
 
-    // Message handler
-    ws.on('message', async (data) => {
+    ws.on('message', async (data: string | Buffer) => {
       try {
         const message = JSON.parse(data.toString());
         
-        // Handle ping messages
         if (message.type === 'ping') {
           return ws.send(JSON.stringify({ type: 'pong' }));
         }
 
-        // Handle regular messages
         if (message.recipient && message.text) {
           const msgDoc = await Message.create({
             sender: ws.userId,
@@ -99,7 +108,6 @@ export const createWebSocketServer = (server: Server) => {
             text: message.text
           });
 
-          // Broadcast to recipient
           wss.clients.forEach((client) => {
             const c = client as CustomWebSocket;
             if (c.userId === message.recipient && c.readyState === WebSocket.OPEN) {
@@ -118,23 +126,22 @@ export const createWebSocketServer = (server: Server) => {
       }
     });
 
-    // Notify all clients about online users
     const notifyOnlineUsers = async () => {
+      const clients = Array.from(wss.clients) as CustomWebSocket[];
       const onlineUsers = await Promise.all(
-        Array.from(wss.clients)
-          .filter(client => (client as CustomWebSocket).userId)
+        clients
+          .filter(client => client.userId)
           .map(async (client) => {
-            const wsClient = client as CustomWebSocket;
-            const user = await User.findById(wsClient.userId);
+            const user = await User.findById(client.userId);
             return {
-              userId: wsClient.userId,
-              username: wsClient.username,
+              userId: client.userId,
+              username: client.username,
               avatarLink: user?.avatarLink
             };
           })
       );
 
-      wss.clients.forEach(client => {
+      clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify({
             online: onlineUsers.filter(user => user !== null)
@@ -143,21 +150,17 @@ export const createWebSocketServer = (server: Server) => {
       });
     };
 
-    // Initial notification
     notifyOnlineUsers();
 
-    // Cleanup on close
     ws.on('close', () => {
       notifyOnlineUsers();
     });
 
-    // Error handling
-    ws.on('error', (error) => {
+    ws.on('error', (error: Error) => {
       console.error('WebSocket error:', error);
     });
   });
 
-  // Cleanup on server close
   server.on('close', () => {
     clearInterval(heartbeatInterval);
     wss.clients.forEach(client => client.close());

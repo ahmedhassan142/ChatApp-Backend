@@ -2,7 +2,7 @@
   "name": "your-app",
   "version": "1.0.0",
   "type": "module",
-"scripts": {
+  "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node-esm server.ts"
