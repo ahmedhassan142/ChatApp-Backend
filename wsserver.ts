@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { User } from './models/usermodel.js';
 import { Message } from './models/message.js';
 
-// Complete CustomWebSocket interface with all required properties and methods
+// Complete WebSocket interface with all methods and custom properties
 interface CustomWebSocket extends WebSocket {
   // Custom properties
   userId?: string;
@@ -13,17 +13,18 @@ interface CustomWebSocket extends WebSocket {
   pingInterval?: NodeJS.Timeout;
   timeout?: NodeJS.Timeout;
 
-  // WebSocket methods we explicitly use
+  // All essential WebSocket methods we use
   send(data: string): void;
   close(code?: number, reason?: string): void;
   terminate(): void;
   ping(data?: any): void;
   
-  // Event handlers
+  // Event handlers with proper typing
   on(event: 'close', listener: (code: number, reason: Buffer) => void): this;
   on(event: 'error', listener: (err: Error) => void): this;
   on(event: 'message', listener: (data: Buffer) => void): this;
-  on(event: 'pong', listener: () => void): this;
+  on(event: 'open', listener: () => void): this;
+  on(event: 'ping' | 'pong', listener: (data: Buffer) => void): this;
   on(event: string, listener: (...args: any[]) => void): this;
 }
 
@@ -46,7 +47,7 @@ export const createWebSocketServer = (server: Server) => {
           return done(false, 401, 'Authentication token required');
         }
 
-        jwt.verify(token, process.env.JWTPRIVATEKEY!, (err: Error | null, decoded: unknown) => {
+        jwt.verify(token, process.env.JWTPRIVATEKEY!, (err: Error | null) => {
           if (err) {
             console.error('Token verification failed:', err);
             return done(false, 403, 'Invalid token');
@@ -81,7 +82,6 @@ export const createWebSocketServer = (server: Server) => {
       return ws.close(4000, 'Invalid request');
     }
 
-    // Extract token from URL or cookies
     const url = new URL(`ws://${req.headers.host}${req.url}`);
     const token = url.searchParams.get('token') || 
                  req.headers.cookie?.split(';')
@@ -111,12 +111,10 @@ export const createWebSocketServer = (server: Server) => {
       try {
         const message = JSON.parse(data.toString());
         
-        // Handle ping messages
         if (message.type === 'ping') {
           return ws.send(JSON.stringify({ type: 'pong' }));
         }
 
-        // Handle regular messages
         if (message.recipient && message.text) {
           const msgDoc = await Message.create({
             sender: ws.userId,
