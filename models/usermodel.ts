@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
-const { passwordComplexity } = require('joi-password-complexity');
+
 
 export interface IUser extends Document {
   firstName: string;
@@ -53,22 +53,15 @@ export const validateRegister = (data: {
     firstName: Joi.string().required().label("First Name"),
     lastName: Joi.string().required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
-    password:  passwordComplexity({
-      min: 8,
-      max: 26,
-      lowerCase: 1,
-      upperCase: 1,
-      numeric: 1,
-      symbol: 1,
-      requirementCount: 4,
-    }).required().label("Password")
-  });
-  return schema.validate(data);
-};
-export const validateLogin = (data: { email: string; password: string }) => {
-  const schema = Joi.object({
-    email: Joi.string().email().required().label("Email"),
-    password: Joi.string().required().label("Password"),
+    password: Joi.string()
+      .min(8)
+      .max(26)
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'))
+      .required()
+      .label("Password")
+      .messages({
+        'string.pattern.base': 'Password must contain at least one lowercase, one uppercase, one number, and one special character'
+      })
   });
   return schema.validate(data);
 };
