@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [process.env.NEXT_PUBLIC_BASE_URL|| 'http://localhost:3000',process.env.NEXT_PUBLIC_SMART_REPLY_API||"http://localhost:8000"],
+    origin: [process.env.NEXT_PUBLIC_BASE_URL|| 'https://chat-app-frontend-git-main-ahmed-hassans-projects-96c42d63.vercel.app',process.env.NEXT_PUBLIC_SMART_REPLY_API||"http://localhost:8000"],
      methods: ["GET", "POST", "PUT", "DELETE"], // Your Next.js URL
     credentials: true,
      allowedHeaders: ['Content-Type', 'Authorization','Cookie'] // Required for cookies/sessions
