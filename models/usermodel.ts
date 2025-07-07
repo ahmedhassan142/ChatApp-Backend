@@ -53,7 +53,15 @@ export const validateRegister = (data: {
     firstName: Joi.string().required().label("First Name"),
     lastName: Joi.string().required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
-    password: passwordComplexity().required().label("Password"),
+       password: passwordComplexity({
+      min: 8,
+      max: 26,
+      lowerCase: 1,
+      upperCase: 1,
+      numeric: 1,
+      symbol: 1,
+      requirementCount: 4,
+    }).required().label("Password")
   });
   return schema.validate(data);
 };
