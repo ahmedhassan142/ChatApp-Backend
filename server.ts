@@ -1,3 +1,6 @@
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
 import dotenv from "dotenv";
 
 import express from "express"
@@ -8,7 +11,7 @@ import userroute from "./routes/userroute.js";
 import avatarroute from "./routes/avatarroute.js";
 import cookieParser from "cookie-parser";
 import { createWebSocketServer } from "./wsserver.js";
-import path from "path";
+
 import verifyroute from "./routes/verifyroute.js";
 
 
@@ -41,7 +44,7 @@ app.use("/api/user", verifyroute);  // ✅ Now routes to /api/user/verify
 
 
 // Serve static files
-const staticPath = path.join(__dirname, "..", "frontend", "dist");
+const staticPath = join(__dirname, "..", "frontend", "dist");
 app.use(express.static(staticPath));
 
 // Verify frontend files exist
