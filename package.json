@@ -2,11 +2,11 @@
   "name": "your-app",
   "version": "1.0.0",
   "type": "module",
- "scripts": {
-  "start": "ts-node-esm server.ts",
-  "build": "tsc",
-  "serve": "node dist/server.js"
-},
+"scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-esm server.ts"
+  },
   "dependencies": {
     "@types/joi-password-complexity": "^3.1.0",
     "bcrypt": "^6.0.0",
