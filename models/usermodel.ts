@@ -1,7 +1,7 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
-import passwordComplexity from "joi-password-complexity";
+const { passwordComplexity } = require('joi-password-complexity');
 
 export interface IUser extends Document {
   firstName: string;
@@ -53,7 +53,7 @@ export const validateRegister = (data: {
     firstName: Joi.string().required().label("First Name"),
     lastName: Joi.string().required().label("Last Name"),
     email: Joi.string().email().required().label("Email"),
-       password: passwordComplexity({
+    password:  passwordComplexity({
       min: 8,
       max: 26,
       lowerCase: 1,
@@ -65,11 +65,7 @@ export const validateRegister = (data: {
   });
   return schema.validate(data);
 };
-
-export const validateLogin = (data: {
-  email: string;
-  password: string;
-}) => {
+export const validateLogin = (data: { email: string; password: string }) => {
   const schema = Joi.object({
     email: Joi.string().email().required().label("Email"),
     password: Joi.string().required().label("Password"),
