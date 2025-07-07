@@ -13,6 +13,8 @@ import cookieParser from "cookie-parser";
 import { createWebSocketServer } from "./wsserver.js";
 
 import verifyroute from "./routes/verifyroute.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
 
