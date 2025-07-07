@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+     "types": ["node"],
     "skipLibCheck": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -19,7 +20,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "types": ["node"],
+    
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
