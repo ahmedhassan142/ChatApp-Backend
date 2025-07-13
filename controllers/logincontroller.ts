@@ -33,7 +33,7 @@ const logincontroller = async (req: Request, res: Response) => {
     // Set cookie
     res.cookie("authToken", token, {
       httpOnly: true,  // Recommended for security
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
       sameSite: "lax", // or "strict" for better security
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
